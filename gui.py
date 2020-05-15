@@ -1,169 +1,93 @@
 import sys
-from PyQt5.QtWidgets import QMainWindow, QApplication
-
+from PyQt5.QtWidgets import QMainWindow, QApplication, QAction, qApp, QWidget, QVBoxLayout, QTabWidget, QPushButton, \
+    QInputDialog, QLineEdit
 
 class Gui(QMainWindow):
 
     def __init__(self):
         super().__init__()
-
         self.initUI()
 
     def initUI(self):
         self.statusBar().showMessage('Ready')
 
-        self.setGeometry(300, 300, 250, 150)
+        menubar = self.menuBar()
+        fichierMenu = menubar.addMenu("Fichier")
+
+        openAct = QAction("Ouvrir",self)
+        openAct.triggered.connect(self.open)
+        openAct.setShortcut('ctrl+O')
+        openAct.setStatusTip('Ouvrir un fichier')
+
+        recAct = QAction("Enregistrer",self)
+        recAct.triggered.connect(self.rec)
+        recAct.setShortcut('ctrl+S')
+        recAct.setStatusTip('Enregistrer un fichier')
+
+
+        quitAct = QAction("Quitter",self)
+        quitAct.triggered.connect(self.exit)
+        quitAct.setShortcut('ctrl+Q')
+        quitAct.setStatusTip('Quitter')
+
+
+
+        fichierMenu.addAction(openAct)
+        fichierMenu.addAction(recAct)
+        fichierMenu.addSeparator()
+        fichierMenu.addAction(quitAct)
+
+        self.setMinimumSize(1280, 720)
+
         self.setWindowTitle('Ravi Example')
+
+        self.myWidget = MyTableWidget(self)
+
+        self.setCentralWidget(self.myWidget)
+
         self.show()
 
-        def __init__(self):
-            super(Gui, self).__init__()
-            self.setFixedSize(1920, 1080)
-            # setting the minimum size
-            self.setMinimumSize(1280, 720)
+    def open(self):
+        print("open")
 
-        # menu bar
-        def initUI(self):
-            self.setWindowTitle(self.title)
-            self.setGeometry(self.left, self.top, self.width, self.height)
+    def rec(self):
+        print("rec")
 
-            mainMenu = self.menuBar()
-            openMenu = mainMenu.addMenu('Open')
-            registerMenu = mainMenu.addMenu('Register')
-            leaveMenu = mainMenu.addMenu('Leave')
+    def exit(self):
+        print("exit")
+        self.quit
 
-        # ajouter description dans status bar
-        def __init__(self, *args, **kwargs):
-            super().__init__(*args, **kwargs)
 
-            self.initUI()
+class MyTableWidget(QWidget):
 
-        def initUI(self):
-            self.setGeometry(200, 200, 200, 200)
-
-            exitAction = QAction('&Exit', self)
-            exitAction.setShortcut('Ctrl+Q')
-            exitAction.setStatusTip('Exit application')
-            exitAction.triggered.connect(qApp.quit)
-
-            self.statusBar()
-
-            menubar = self.menuBar()
-            fileMenu = menubar.addMenu('&File')
-            fileMenu.addAction(exitAction)
-
-            self.setWindowTitle('PyQt5 Basic Menubar')
-            self.show()
-
-    # ajouter onglet
     def __init__(self, parent):
-        super(QMainWindow, self).__init__(parent)
+        super(QWidget, self).__init__(parent)
         self.layout = QVBoxLayout(self)
 
         # Initialize tab screen
         self.tabs = QTabWidget()
         self.tab1 = QWidget()
         self.tab2 = QWidget()
-        self.tabs.resize(300, 200)
+
 
         # Add tabs
-        self.tabs.addTab(self.tab1, "Tab 1")
-        self.tabs.addTab(self.tab2, "Tab 2")
+        self.tabs.addTab(self.tab1, "Onglet 1")
+        self.tabs.addTab(self.tab2, "Onglet 2")
 
-        # Create first tab
         self.tab1.layout = QVBoxLayout(self)
-        self.pushButton1 = QPushButton("PyQt5 button")
-        self.tab1.layout.addWidget(self.pushButton1)
+        openButton = QPushButton("Nom ?")
+        openButton.clicked.connect(self.openClick)
+
+        self.tab1.layout.addWidget(openButton)
         self.tab1.setLayout(self.tab1.layout)
+        self.tab1.setStyleSheet("background-image: url(C\\Users\\bessa\\PycharmProjects\\ravi2Gui\\16c1e12e24fe8e7e9aebd1bd6f3ffb3a); background-attachment: fixed")
+
 
         # Add tabs to widget
         self.layout.addWidget(self.tabs)
         self.setLayout(self.layout)
 
-        # ajouter un bouton qui ouvre un "input file" pour demander le nom de l'utilisateur
-
-        # Label's to fill widget
-        self.label1 = QtWidgets.QLabel("Tab 1")
-        self.label2 = QtWidgets.QLabel("Tab 2")
-
-        # Adding tab's
-        self.tab_widget.addTab(self.label1, "Tab 1")
-        self.tab_widget.addTab(self.label2, "Tab 2")
-
-        # Tab button's
-        self.right = self.tab_widget.tabBar().RightSide
-        self.tab_widget.tabBar().setTabButton(0, self.right, TabButtonWidget())
-        self.tab_widget.tabBar().setTabButton(1, self.right, TabButtonWidget())
-
-        # Tab settings
-        self.tab_widget.tabBar().setMovable(True)
-
-        self.show()
-
-
-def __init__(self):
-    super().__init__()
-    self.title = 'PyQt5 file dialogs - pythonspot.com'
-    self.left = 10
-    self.top = 10
-    self.width = 640
-    self.height = 480
-    self.initUI()
-
-
-def initUI(self):
-    self.setWindowTitle(self.title)
-    self.setGeometry(self.left, self.top, self.width, self.height)
-
-    self.openFileNameDialog()
-    self.openFileNamesDialog()
-    self.saveFileDialog()
-
-    self.show()
-
-
-def openFileNameDialog(self):
-    options = QFileDialog.Options()
-    options |= QFileDialog.DontUseNativeDialog
-    fileName, _ = QFileDialog.getOpenFileName(self, "QFileDialog.getOpenFileName()", "",
-                                              "All Files (*);;Python Files (*.py)", options=options)
-    if fileName:
-        print(fileName)
-
-
-def openFileNamesDialog(self):
-    options = QFileDialog.Options()
-    options |= QFileDialog.DontUseNativeDialog
-    files, _ = QFileDialog.getOpenFileNames(self, "QFileDialog.getOpenFileNames()", "",
-                                            "All Files (*);;Python Files (*.py)", options=options)
-    if files:
-        print(files)
-
-
-def saveFileDialog(self):
-    options = QFileDialog.Options()
-    options |= QFileDialog.DontUseNativeDialog
-    fileName, _ = QFileDialog.getSaveFileName(self, "QFileDialog.getSaveFileName()", "",
-                                              "All Files (*);;Text Files (*.txt)", options=options)
-    if fileName:
-        print(fileName)
-
-    # ajouter une image de notre choix
-
-
-def __init__(self):
-    QWidget.__init__(self)
-    self.setGeometry(100, 100, 300, 200)
-
-    oImage = QImage("test.png")
-    sImage = oImage.scaled(QSize(300, 200))  # resize Image to widgets size
-    palette = QPalette()
-    palette.setBrush(QPalette.Window, QBrush(sImage))
-    self.setPalette(palette)
-
-    self.label = QLabel('Test', self)  # test, if it's really backgroundimage
-    self.label.setGeometry(50, 50, 200, 50)
-
-    self.show()
-
-
+    def openClick(self):
+        print("click")
+        nom,type = QInputDialog.getText(self,"input dialog","Votre Nom ?",QLineEdit.Normal,"")
+        print(nom)
