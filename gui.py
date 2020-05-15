@@ -7,7 +7,7 @@ class Gui(QMainWindow):
     def __init__(self):
         super().__init__()
         self.initUI()
-hfhdsgx
+
     def initUI(self):
         self.statusBar().showMessage('Ready')
 
